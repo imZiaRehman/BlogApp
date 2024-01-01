@@ -3,3 +3,6 @@
 ################################################################################
 
 /.vs/BlogApp/FileContentIndex
+/BlogApp/App_Data/BlogApp.Data.BlogDbContext.mdf
+*.ldf
+/BlogApp/App_Data/BlogApp.Data.BlogDbContext_log.ldf

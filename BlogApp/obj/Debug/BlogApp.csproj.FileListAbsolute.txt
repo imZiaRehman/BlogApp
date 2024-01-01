@@ -81,5 +81,6 @@ C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\EntityFramework.dll
 C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\EntityFramework.SqlServer.dll
 C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\EntityFramework.xml
 C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\EntityFramework.SqlServer.xml
-C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.InitialCreate.resources
+C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.initial.resources
 C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.csproj.GenerateResource.cache
+C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedPostLikComment.resources

@@ -1,0 +1,90 @@
+﻿@model BlogApp.ViewModels.PostViewModel
+
+<div class="post-container">
+    <h2>@Model.Title</h2>
+
+    <div class="post-header">
+        <p class="small-font">Created by: @Model.UserName | Date: @Model.CreatedAt</p>
+    </div>
+
+    <div class="post-content">
+        @Html.Raw(Model.Content)
+    </div>
+
+    <div class="post-details">
+
+        <p>Likes: <span id="likeCount">@Model.Likes.Count</span></p>
+
+        <button id="likeButton" class="btn btn-primary LikePost">
+            @if (Model.UserHasLiked)
+            {
+                <text>Unlike</text>
+            }
+            else
+            {
+                <text>Like</text>
+            }
+        </button>
+
+        <button class="btn btn-danger">Report</button>
+    </div>
+
+    <div class="add-comment-section">
+        <!-- Add Comment Form -->
+        <form>
+            <!-- Input for adding a new comment -->
+            <textarea class="form-control" rows="3" placeholder="Add a comment"></textarea>
+
+            <!-- Button to submit the comment -->
+            <button type="submit" class="btn btn-primary">Add Comment</button>
+        </form>
+
+        <!-- Display all comments -->
+        <div class="comments">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="comment">
+
+                    <p><strong>@comment.UserName:</strong> @comment.CommentText</p>
+                    <p class="small-font">Date: @comment.CreatedAt</p>
+
+                </div>
+            }
+        </div>
+    </div>
+
+
+    <script>
+    $(document).ready(function() {
+        $("#likeButton").click(function () {
+            console.log("Like Button Called");
+
+            // Assuming you have a variable to store whether the user has liked the post
+            var userHasLiked = false;
+
+            // Check the text of the button to determine the action
+            if ($(this).text().trim().toLowerCase() === "like") {
+                // If the button text is "Like," the user is liking the post
+                userHasLiked = true;
+
+                // Update the button text to "Unlike"
+                $(this).text("Unlike");
+            } else {
+                // If the button text is "Unlike," the user is unliking the post
+                userHasLiked = false;
+
+                // Update the button text to "Like"
+                $(this).text("Like");
+            }
+
+            // Send the like status to the server
+            $.post("/Blog/LikePost", { postId: @Model.PostId, userHasLiked: userHasLiked }, function () {
+                // Update the UI (e.g., increment or decrement like count)
+                var currentLikeCount = parseInt($("#likeCount").text());
+                $("#likeCount").text(userHasLiked ? currentLikeCount + 1 : currentLikeCount - 1);
+            });
+        });
+    });
+    </script>
+
+</div>

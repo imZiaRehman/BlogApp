@@ -82,7 +82,7 @@ namespace BlogApp.Controllers
 
                 // Storing user information in the session
                 Session["AuthenticatedUser"] = authenticatedUser;
-
+                FormsAuthentication.SetAuthCookie(user.Email, false);
                 // Successful login, redirect to home
                 return RedirectToAction("Index", "Home");
             }
@@ -93,10 +93,10 @@ namespace BlogApp.Controllers
             }
         }
 
-        [HttpGet]
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
+            Session.Clear();
             Session.Abandon();
 
             // Redirect to the login page

@@ -18,6 +18,12 @@ namespace BlogApp
                 url: "{controller}/{action}",
                 defaults: new { controller = "Account", action = "Login" }
             );
+
+            routes.MapRoute(
+                name: "Logout",
+                url: "Account/Logout",
+                defaults: new { controller = "Account", action = "Logout" }
+            );
         }
     }
 }

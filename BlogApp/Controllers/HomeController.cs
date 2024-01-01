@@ -1,4 +1,5 @@
 ﻿using BlogApp.Models;
+using BlogApp.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +8,29 @@ using System.Web.Mvc;
 
 namespace BlogApp.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
+        private readonly BlogRepository _blogRepository;
 
+        public HomeController()
+        {
+            _blogRepository = new BlogRepository(new Data.BlogDbContext());
+        }
+
+        [HttpGet]
         public ActionResult Index()
         {
+
             var authenticatedUser = (User)Session["AuthenticatedUser"];
-            if(authenticatedUser == null)
+            if (authenticatedUser != null)
             {
-                return View();
+                var posts = _blogRepository.GetAllPosts();
+                return View(posts);
+
+                //return View();
             }
-            
+
             //If User is not authenticated redirect to login page.
             return RedirectToAction("Login");
         }
@@ -35,5 +48,13 @@ namespace BlogApp.Controllers
 
             return View();
         }
+
+        public ActionResult AddBlog()
+        {
+            return null;
+        }
+
+       
+
     }
 }
