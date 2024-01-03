@@ -20,12 +20,6 @@ namespace BlogApp.ViewModels
 
         public bool UserHasLiked {  get; set; }
 
-            //=> isPostLikedByUser();
-
-        private bool isPostLikedByUser()
-        {
-            return true;
-        } 
         public string ShortenedContent => GetShortenedContent();
 
         private string GetShortenedContent()
@@ -47,6 +41,7 @@ namespace BlogApp.ViewModels
 
         public virtual User user { get; set; }
 
+        public string CommentText { get; set; }
         public virtual ICollection<CommentViewModel> Comments { get; set; }
         public virtual ICollection<Attachment> Attachments { get; set; }
         public virtual ICollection<Like> Likes { get; set; }

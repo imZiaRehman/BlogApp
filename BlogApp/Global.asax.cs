@@ -7,6 +7,10 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Services.Description;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using BlogApp.App_Start;
+
 
 namespace BlogApp
 {
@@ -18,6 +22,18 @@ namespace BlogApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            // Configure Cloudinary
+            Account account = new Account(
+                "dhjmzgxek",
+                "264693227921537",
+                "4wZiP7kyWnoFWRZv9dExa4sAC1M"
+            );
+
+            Cloudinary cloudinary = new Cloudinary(account);
+
+            CloudinaryConfig.CloudinaryInstance = cloudinary;
+
         }
     }
 }

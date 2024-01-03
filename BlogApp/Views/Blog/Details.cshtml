@@ -15,29 +15,46 @@
 
         <p>Likes: <span id="likeCount">@Model.Likes.Count</span></p>
 
-        <button id="likeButton" class="btn btn-primary LikePost">
-            @if (Model.UserHasLiked)
-            {
-                <text>Unlike</text>
-            }
-            else
-            {
-                <text>Like</text>
-            }
-        </button>
+        @using (Html.BeginForm("LikePost", "Blog", FormMethod.Post))
+         {
 
-        <button class="btn btn-danger">Report</button>
+            @Html.HiddenFor(model => model.UserId)
+            @Html.HiddenFor(model => model.PostId)
+
+            <button type="submit" id="likeButton" class="btn btn-primary LikePost">
+                @if (Model.UserHasLiked)
+                {
+                    <text>Unlike</text>
+                }
+                else
+                {
+                    <text>Like</text>
+                }
+            </button>
+         }
+
+
+        @*<button type="submit" class="btn btn-danger">Report</button>*@
+
     </div>
+
+  
+
 
     <div class="add-comment-section">
         <!-- Add Comment Form -->
-        <form>
-            <!-- Input for adding a new comment -->
-            <textarea class="form-control" rows="3" placeholder="Add a comment"></textarea>
 
-            <!-- Button to submit the comment -->
-            <button type="submit" class="btn btn-primary">Add Comment</button>
-        </form>
+        @{
+            var commentViewModel = new BlogApp.ViewModels.CommentViewModel
+            {
+                UserId = Model.UserId,
+                PostId = Model.PostId
+                
+            };
+        }
+
+        @Html.Partial("AddComment", commentViewModel)
+
 
         <!-- Display all comments -->
         <div class="comments">
@@ -48,6 +65,13 @@
                     <p><strong>@comment.UserName:</strong> @comment.CommentText</p>
                     <p class="small-font">Date: @comment.CreatedAt</p>
 
+                    <div class="comment-images">
+                        @foreach (var attachment in comment.commentAttachments)
+                        {
+                            <img src="@attachment.FilePath" alt="@attachment.FileName" class="img-thumbnail" style="width: 200px; height: auto;" />
+                        }
+                    </div>
+
                 </div>
             }
         </div>
@@ -55,36 +79,7 @@
 
 
     <script>
-    $(document).ready(function() {
-        $("#likeButton").click(function () {
-            console.log("Like Button Called");
-
-            // Assuming you have a variable to store whether the user has liked the post
-            var userHasLiked = false;
-
-            // Check the text of the button to determine the action
-            if ($(this).text().trim().toLowerCase() === "like") {
-                // If the button text is "Like," the user is liking the post
-                userHasLiked = true;
-
-                // Update the button text to "Unlike"
-                $(this).text("Unlike");
-            } else {
-                // If the button text is "Unlike," the user is unliking the post
-                userHasLiked = false;
-
-                // Update the button text to "Like"
-                $(this).text("Like");
-            }
-
-            // Send the like status to the server
-            $.post("/Blog/LikePost", { postId: @Model.PostId, userHasLiked: userHasLiked }, function () {
-                // Update the UI (e.g., increment or decrement like count)
-                var currentLikeCount = parseInt($("#likeCount").text());
-                $("#likeCount").text(userHasLiked ? currentLikeCount + 1 : currentLikeCount - 1);
-            });
-        });
-    });
+    
     </script>
 
 </div>

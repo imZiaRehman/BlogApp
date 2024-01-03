@@ -14,6 +14,8 @@ namespace BlogApp.Data
         public DbSet<Like> Likes { get; set; }
 
         public DbSet<Comment> Comments { get; set; }
+                                    
+        public DbSet<CommentAttachment> CommentsAttachment { get; set; }
 
         public DbSet<Attachment> Attachments { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

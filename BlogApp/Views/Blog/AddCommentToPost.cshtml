@@ -1,0 +1,21 @@
+﻿@model BlogApp.ViewModels.CommentViewModel
+
+
+@using (Html.BeginForm("AddCommentToPost", "Blog", FormMethod.Post, new { id = "commentForm", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.UserId)
+    @Html.HiddenFor(model => model.PostId)
+    <!-- Input for adding a new comment -->
+    @Html.TextAreaFor(model => model.CommentText, new { @class = "form-control", rows = "3", placeholder = "Add a comment" })
+    @Html.ValidationMessageFor(model => model.CommentText, "", new { @class = "text-danger" })
+
+    <input type="file" name="attachment" id="attachment" accept="image/*">
+    <!-- Button to submit the comment -->
+    <button type="submit" class="btn btn-primary">Add Comment</button>
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
