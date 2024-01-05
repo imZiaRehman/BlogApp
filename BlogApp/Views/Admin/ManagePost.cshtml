@@ -1,0 +1,33 @@
+﻿
+@model List<BlogApp.ViewModels.PostViewModel>
+
+@{
+    ViewBag.Title = "ManagePost";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<h2>ManagePost</h2>
+
+<p>Please selct any Pending Post to Approve or Decline </p>
+
+<h2>All Posts</h2>
+
+
+<main>
+
+    <div class="list-group">
+        @foreach (var post in Model)
+        {
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">@post.Title</h4>
+                <p class="list-group-item-text"> @Html.Raw(post.ShortenedContent)</p>
+                <p class="list-group-item-text">Created at: @post.CreatedAt.ToString("MMMM dd, yyyy h:mm tt")</p>
+                <p class="list-group-item-text">Posted By: @post.UserName</p>
+                <a href="@Url.Action("Details", "Admin", new { id = post.PostId })" class="btn btn-primary">View Details</a>
+                
+            </div>
+         }
+    </div>
+
+</main>

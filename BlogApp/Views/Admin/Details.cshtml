@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Details Page";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model BlogApp.ViewModels.PostViewModel
+
+<div class="post-container">
+    <h2>@Model.Title</h2>
+
+    <div class="post-header">
+        <p class="small-font">Created by: @Model.UserName | Date: @Model.CreatedAt</p>
+    </div>
+
+    <div class="post-content">
+        @Html.Raw(Model.Content)
+    </div>
+
+    @using (Html.BeginForm("ApprovePost", "Blog", new { postId = Model.PostId }, FormMethod.Post, new { @class = "form-inline" }))
+     {
+        <button type="submit" class="btn btn-success">Approve Post</button>
+     }
+
+    @using (Html.BeginForm("RejectPost", "Blog", new { postId = Model.PostId }, FormMethod.Post, new { @class = "form-inline" }))
+     {
+        <button type="submit" class="btn btn-danger">Reject Post</button>
+     }
+
+
+    @*<div class="post-actions">
+        @Html.ActionLink("ApprovePost", "Blog", new { postId = Model.PostId }, new { @class = "btn btn-success" })
+        @Html.ActionLink("RejectPost", "Blog", new { postId = Model.PostId }, new { @class = "btn btn-danger" })
+    </div>*@
+
+</div>

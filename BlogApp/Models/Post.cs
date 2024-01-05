@@ -15,6 +15,8 @@ namespace BlogApp.Models
         [AllowHtml]
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
+        
+        public Status PostStatus { get; set; }
 
         // Foreign key
         public int UserId { get; set; }
@@ -26,5 +28,15 @@ namespace BlogApp.Models
         public virtual ICollection<Attachment> Attachments { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
 
+    }
+
+    public enum Status
+    {
+        PendingApproval,
+        Reported,
+        Rejected,
+        Deleted,
+        DeletedAfterReport,
+        Live
     }
 }

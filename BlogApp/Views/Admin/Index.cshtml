@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<BlogApp.ViewModels.PostViewModel>
+
+<h2>All Posts</h2>
+
+
+<main>
+    @foreach (var post in Model)
+    {
+        <div>
+            <h3>@post.Title</h3>
+
+            <div>
+                @Html.Raw(post.ShortenedContent)
+            </div>
+
+            <p>Posted at: @post.CreatedAt.ToString("MMMM dd, yyyy h:mm tt")</p>
+            <p>Posted By: @post.UserName</p>
+
+            @*Read More button to redirect user to full view of the Blog*@
+
+            @Html.ActionLink("Read More", "AdminPostDetails", "Blog", new { id = post.PostId }, new { @class = "btn btn-primary" })
+
+        </div>
+        <hr />
+    }
+
+</main>

@@ -1,0 +1,42 @@
+﻿@model BlogApp.ViewModels.DashboardViewModel
+
+<h2>Most Recent Posts</h2>
+<div class="list-group">
+    @foreach (var post in Model.RecentPosts)
+    {
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading">@post.Title</h4>
+            <p class="list-group-item-text">Created at: @post.CreatedAt.ToString("MMMM dd, yyyy h:mm tt")</p>
+            <p class="list-group-item-text">Posted By: @post.UserName</p>
+
+
+            <a href="@Url.Action("Details", "Blog", new { id = post.PostId })" class="btn btn-primary">View Details</a>
+        </div>
+    }
+</div>
+
+<h2>Most Recent Comments</h2>
+@foreach (var comment in Model.RecentComments)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">@comment.PostTitle</h5>
+            <h6 class="card-text">@comment.UserName</h6>
+            <p class="card-text">@comment.CommentText</p>
+            <p class="card-text"><small class="text-muted">Created at: @comment.CreatedAt.ToString("MMMM dd, yyyy h:mm tt")</small></p>
+            <a href="@Url.Action("Details", "Blog", new { id = comment.PostId })" class="btn btn-primary">View Post</a>
+        </div>
+    </div>
+}
+
+
+<h2>Most Recent Likes</h2>
+@foreach (var like in Model.RecentLike)
+{
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">@like.UserName Likes @like.PostTitle</p>
+            <a href="@Url.Action("Details", "Blog", new { id = like.PostId })" class="btn btn-primary">View Post</a>
+        </div>
+    </div>
+}

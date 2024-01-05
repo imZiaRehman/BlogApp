@@ -13,6 +13,7 @@ namespace BlogApp.Models
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        public CommentStatus _CommentStatus { get; set; }
         // Foreign key
         public int UserId { get; set; }
 
@@ -20,5 +21,13 @@ namespace BlogApp.Models
         public int PostId { get; set; }
         public virtual ICollection<Models.CommentAttachment> commentAttachments { get; set; }
 
+    }
+
+    public enum CommentStatus
+    {
+        Reported,
+        Deleted,
+        DeletedAfterReport,
+        Live
     }
 }

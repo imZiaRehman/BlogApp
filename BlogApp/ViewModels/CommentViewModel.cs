@@ -18,6 +18,8 @@ namespace BlogApp.ViewModels
         public DateTime CreatedAt { get; set; }
         public string UserName { get; set; }
 
+        public string PostTitle {  get; set; }
+
         public virtual ICollection<Models.CommentAttachment> commentAttachments { get; set; }
 
     }

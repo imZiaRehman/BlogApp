@@ -18,6 +18,9 @@ namespace BlogApp.Data
         public DbSet<CommentAttachment> CommentsAttachment { get; set; }
 
         public DbSet<Attachment> Attachments { get; set; }
+
+        public DbSet<ReportPost> ReportPosts { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             // Configure the model, e.g., set the primary key, unique constraints, etc.

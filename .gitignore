@@ -6,3 +6,5 @@
 /BlogApp/App_Data/BlogApp.Data.BlogDbContext.mdf
 *.ldf
 /BlogApp/App_Data/BlogApp.Data.BlogDbContext_log.ldf
+/BlogApp/bin/BlogApp.dll
+/BlogApp/bin/BlogApp.pdb

@@ -16,7 +16,7 @@
                 @Html.Raw(post.ShortenedContent)
             </div>
 
-            <p>Created at: @post.CreatedAt</p>
+            <p>Posted at: @post.CreatedAt.ToString("MMMM dd, yyyy h:mm tt")</p>
             <p>Posted By: @post.UserName</p>
 
             @*Read More button to redirect user to full view of the Blog*@

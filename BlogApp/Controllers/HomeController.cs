@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace BlogApp.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "User")]
     public class HomeController : Controller
     {
         private readonly BlogRepository _blogRepository;
@@ -31,12 +31,10 @@ namespace BlogApp.Controllers
             {
                 var posts = _blogRepository.GetAllPosts();
                 return View(posts);
-
-                //return View();
             }
 
             //If User is not authenticated redirect to login page.
-            return RedirectToAction("Login");
+            return RedirectToAction("Login", "Account");
         }
 
         public ActionResult About()
@@ -56,6 +54,11 @@ namespace BlogApp.Controllers
         public ActionResult AddBlog()
         {
             return null;
+        }
+
+        public ActionResult Dashboard()
+        {
+            return View();
         }
     }
 

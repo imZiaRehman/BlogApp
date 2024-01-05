@@ -16,7 +16,7 @@
         <p>Likes: <span id="likeCount">@Model.Likes.Count</span></p>
 
         @using (Html.BeginForm("LikePost", "Blog", FormMethod.Post))
-         {
+        {
 
             @Html.HiddenFor(model => model.UserId)
             @Html.HiddenFor(model => model.PostId)
@@ -31,10 +31,22 @@
                     <text>Like</text>
                 }
             </button>
-         }
+        }
 
+        @if (Model.UserIdOfUserAccessingPost != Model.UserId)
+        {
 
-        @*<button type="submit" class="btn btn-danger">Report</button>*@
+            using (Html.BeginForm("ReportPostPage", "Blog", FormMethod.Get))
+            {
+
+                @Html.HiddenFor(model => model.PostId)
+
+                <button type="submit" id="ReportPost" class="btn btn-danger">
+                    Report
+                </button>
+            }
+
+        }
 
     </div>
 
@@ -76,10 +88,5 @@
             }
         </div>
     </div>
-
-
-    <script>
-    
-    </script>
 
 </div>

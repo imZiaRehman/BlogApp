@@ -1,0 +1,57 @@
+﻿@model BlogApp.ViewModels.ReportPostViewModel
+
+@{
+    ViewBag.Title = "ReportPost";
+}
+
+<h2>Report Post</h2>
+
+<div>
+    <h4>Post Details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Post.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Post.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Post.Content)
+        </dt>
+
+        <dd>
+            @Html.Raw(Model.Post.Content)
+        </dd>
+
+    </dl>
+</div>
+
+@using (Html.BeginForm("ReportPostPage", "Blog", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Report Reason</h4>
+        <hr />
+
+        @Html.HiddenFor(model => model.UserId)
+        @Html.HiddenFor(model => model.PostId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Reason, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Reason, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Report" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,86 @@
+﻿@model BlogApp.ViewModels.PostViewModel
+
+
+@{
+    ViewBag.Title = "Post Details Page";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="post-container">
+    <h2>@Model.Title</h2>
+
+    <div class="post-header">
+        <p class="small-font">Created by: @Model.UserName | Date: @Model.CreatedAt</p>
+    </div>
+
+    <div class="post-content">
+        @Html.Raw(Model.Content)
+    </div>
+
+    <div class="post-details">
+
+        <p>Likes: <span id="likeCount">@Model.Likes.Count</span></p>
+
+        @using (Html.BeginForm("LikePost", "Blog", FormMethod.Post))
+        {
+
+            @Html.HiddenFor(model => model.UserId)
+            @Html.HiddenFor(model => model.PostId)
+
+            <button type="submit" id="likeButton" class="btn btn-primary LikePost">
+                @if (Model.UserHasLiked)
+                {
+                    <text>Unlike</text>
+                }
+                else
+                {
+                    <text>Like</text>
+                }
+            </button>
+        }
+
+
+        @*<button type="submit" class="btn btn-danger">Report</button>*@
+
+    </div>
+
+
+
+
+    <div class="add-comment-section">
+        <!-- Add Comment Form -->
+
+        @{
+            var commentViewModel = new BlogApp.ViewModels.CommentViewModel
+            {
+                UserId = Model.UserId,
+                PostId = Model.PostId
+
+            };
+        }
+
+        @Html.Partial("AddComment", commentViewModel)
+
+
+        <!-- Display all comments -->
+        <div class="comments">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="comment">
+
+                    <p><strong>@comment.UserName:</strong> @comment.CommentText</p>
+                    <p class="small-font">Date: @comment.CreatedAt</p>
+
+                    <div class="comment-images">
+                        @foreach (var attachment in comment.commentAttachments)
+                        {
+                            <img src="@attachment.FilePath" alt="@attachment.FileName" class="img-thumbnail" style="width: 200px; height: auto;" />
+                        }
+                    </div>
+
+                </div>
+            }
+        </div>
+    </div>
+
+</div>

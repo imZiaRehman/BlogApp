@@ -37,6 +37,7 @@ namespace BlogApp.ViewModels
 
         public int UserId { get; set; }
 
+        public int UserIdOfUserAccessingPost { get; set; }
         public string UserName { get; set; }
 
         public virtual User user { get; set; }

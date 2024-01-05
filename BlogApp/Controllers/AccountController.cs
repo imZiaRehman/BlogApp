@@ -66,6 +66,8 @@ namespace BlogApp.Controllers
         [HttpPost]
         public ActionResult Login(UserViewModel loginUser)
         {
+            System.Diagnostics.Debug.WriteLine("Debugging message: Inside SomeAction");
+
             // Validate login credentials and redirect accordingly
             var user = _userRepository.GetUserByEmail(loginUser.Email);
 
@@ -82,9 +84,19 @@ namespace BlogApp.Controllers
 
                 // Storing user information in the session
                 Session["AuthenticatedUser"] = authenticatedUser;
+
                 FormsAuthentication.SetAuthCookie(user.Email, false);
-                // Successful login, redirect to home
-                return RedirectToAction("Index", "Home");
+                System.Diagnostics.Debug.WriteLine("User Role: " + authenticatedUser.Role);
+
+
+                //On Successfull login redirect to Home page As per the Role of the User.
+                if (authenticatedUser.Role == UserRole.User)
+                {
+                    return RedirectToAction("Index", "Home");
+                } else if (authenticatedUser.Role == UserRole.Admin) {
+                    return RedirectToAction("Index", "Admin");
+                }
+                return RedirectToAction("Index", "Admin");
             }
             else
             {
@@ -95,12 +107,27 @@ namespace BlogApp.Controllers
 
         public ActionResult Logout()
         {
+            //this.Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
+            //this.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            //this.Response.Cache.SetNoStore();
+
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
+            Response.Cache.SetNoStore();
+
             FormsAuthentication.SignOut();
             Session.Clear();
             Session.Abandon();
+            Session.RemoveAll();
+
+            //Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            //Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
+            //Response.Cache.SetNoStore();
+
+
 
             // Redirect to the login page
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login");
         }
 
     }
