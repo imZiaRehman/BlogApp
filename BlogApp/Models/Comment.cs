@@ -19,10 +19,19 @@ namespace BlogApp.Models
 
         // Navigation properties
         public int PostId { get; set; }
-        public virtual ICollection<Models.CommentAttachment> commentAttachments { get; set; }
+        public int? ParentCommentId { get; set; } // Reference to the parent comment
 
+        public virtual ICollection<Models.CommentAttachment> commentAttachments { get; set; }
+        public virtual ICollection<CommentLike> Likes { get; set; }
+
+        // Navigation property for the parent comment
+        public virtual Comment ParentComment { get; set; }
+
+        // Navigation property for child comments
+        public virtual ICollection<Comment> ChildComments { get; set; }
     }
 
+    
     public enum CommentStatus
     {
         Reported,

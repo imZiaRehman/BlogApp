@@ -22,6 +22,7 @@ namespace BlogApp.Controllers
         public ActionResult Index()
         {
             // Get the most recent posts, comments, and likes from the repository
+            
             var recentPosts = _blogRepository.GetMostRecentPosts(5); // Adjust the number as needed
             var recentComments = _blogRepository.GetMostRecentComments(5);
             var recentLikes = _blogRepository.GetMostRecentLikes(5);

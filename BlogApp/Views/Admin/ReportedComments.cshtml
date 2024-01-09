@@ -1,0 +1,53 @@
+﻿@model List<BlogApp.ViewModels.ReportCommentViewModel>
+
+@{
+    ViewBag.Title = "ReportedComments";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Moderator"))
+    {
+        Layout = "~/Views/Shared/_ModeratorLayout.cshtml";
+    }
+}
+
+<h2>ReportedComments</h2>
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Comment</th>
+            <th>Reporter</th>
+            <th>Reason</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reportComment in Model)
+        {
+            <tr>
+                <td>
+                    <strong>@reportComment.Comment.CommentText</strong>
+                    <br />
+                </td>
+                <td>@reportComment.RepoeterName</td>
+                <td>@reportComment.Reason</td>
+                <td>
+                    <div class="btn-group">
+                        @using (Html.BeginForm("AcceptReportedComment", "Blog", new { commentId = reportComment.CommentId }, FormMethod.Post))
+                        {
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        }
+
+                        @using (Html.BeginForm("RejectReportedComment", "Blog", new { commentId = reportComment.CommentId }, FormMethod.Post))
+                        {
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

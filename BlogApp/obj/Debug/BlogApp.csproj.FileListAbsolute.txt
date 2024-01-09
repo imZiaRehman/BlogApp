@@ -103,3 +103,12 @@ C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedDate
 C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedStatusVariable.resources
 C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedStatusVariableLive.resources
 C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedReportPostTableReason.resources
+C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedCommentLikes.resources
+C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedCommentLikesTable.resources
+C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedReportCommentTable.resources
+C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedReplyToComment.resources
+C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedPostSuggestions.resources
+C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedPostSuggestionReplies.resources
+C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedCurrentStatus.resources
+C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\BCrypt.Net.dll
+C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\BCrypt.Net.xml

@@ -20,7 +20,15 @@ namespace BlogApp.ViewModels
 
         public string PostTitle {  get; set; }
 
+        public bool UserHasLiked { get; set; }
+
+        public int? ParentCommentId { get; set; }
+
+        public virtual Comment ParentComment { get; set; }
+
+        public virtual ICollection<CommentViewModel> ChildComments { get; set; }
         public virtual ICollection<Models.CommentAttachment> commentAttachments { get; set; }
+        public virtual ICollection<CommentLike> Likes { get; set; }
 
     }
 }

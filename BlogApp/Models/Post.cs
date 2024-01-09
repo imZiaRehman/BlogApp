@@ -28,6 +28,8 @@ namespace BlogApp.Models
         public virtual ICollection<Attachment> Attachments { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
 
+        public virtual ICollection<PostSuggestion> Suggestion { get; set; }
+
     }
 
     public enum Status

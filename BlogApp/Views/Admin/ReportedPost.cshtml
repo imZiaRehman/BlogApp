@@ -2,7 +2,15 @@
 
 @{
     ViewBag.Title = "Reported Posts";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Moderator"))
+    {
+        Layout = "~/Views/Shared/_ModeratorLayout.cshtml";
+    }
+
 }
 
 <h2>Reported Posts</h2>
@@ -26,14 +34,14 @@
                 <td>
                     <div class="btn-group">
                         @using (Html.BeginForm("AcceptReportToPost", "Blog", new { postId = report.PostId }, FormMethod.Post))
-                         {
+                        {
                             <button type="submit" class="btn btn-success">Accept</button>
-                         }
+                        }
 
                         @using (Html.BeginForm("RejectReportToPost", "Blog", new { postId = report.PostId }, FormMethod.Post))
-                         {
+                        {
                             <button type="submit" class="btn btn-danger">Reject</button>
-                         }
+                        }
 
                     </div>
                 </td>

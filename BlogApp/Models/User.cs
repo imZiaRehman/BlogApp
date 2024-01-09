@@ -14,6 +14,8 @@ namespace BlogApp.Models
         public string LastName { get; set; }
         public UserRole Role { get; set; }
 
+        public CurrentStatus currentStatus { get; set; }
+
     }
     public enum UserRole
     {
@@ -22,4 +24,10 @@ namespace BlogApp.Models
         User
     }
 
+    public enum CurrentStatus
+    {
+        Active,
+        DeActivated,
+        DeActivatedByAdmin,
+    }
 }

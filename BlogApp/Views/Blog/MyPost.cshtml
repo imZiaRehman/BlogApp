@@ -1,0 +1,45 @@
+﻿@model List<BlogApp.ViewModels.PostViewModel>
+
+@{
+    ViewBag.Title = "Home Page";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Moderator"))
+    {
+        Layout = "~/Views/Shared/_ModeratorLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}
+
+
+
+<h2>My Posts</h2>
+
+
+<main>
+    @foreach (var post in Model)
+    {
+        <div>
+            <h3>@post.Title</h3>
+
+            <div>
+                @Html.Raw(post.ShortenedContent)
+            </div>
+
+            <p>Posted at: @post.CreatedAt.ToString("MMMM dd, yyyy h:mm tt")</p>
+            <p>Posted By: @post.UserName</p>
+
+            @*Read More button to redirect user to full view of the Blog*@
+
+            @Html.ActionLink("Read More", "Details", "Blog", new { id = post.PostId }, new { @class = "btn btn-primary" })
+
+        </div>
+        <hr />
+    }
+
+</main>

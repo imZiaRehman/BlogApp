@@ -16,7 +16,6 @@ namespace BlogApp.Controllers
     {
         private readonly UserRepository _userRepository;
 
-
         public AccountController()
         {
             _userRepository = new UserRepository(new Data.BlogDbContext());
@@ -35,10 +34,12 @@ namespace BlogApp.Controllers
             {
                 if (_userRepository.GetUserByEmail(newUser.Email) == null)
                 {
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
+
                     var user = new User
                     {
                         Email = newUser.Email,
-                        Password = newUser.Password,
+                        Password = hashedPassword,
                         FirstName = newUser.FirstName,
                         LastName = newUser.LastName,
                         Role = UserRole.User
@@ -71,9 +72,10 @@ namespace BlogApp.Controllers
             // Validate login credentials and redirect accordingly
             var user = _userRepository.GetUserByEmail(loginUser.Email);
 
-            if (user != null && user.Password == loginUser.Password)
-            {
+            bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(loginUser.Password, user.Password);
 
+            if (user != null && isPasswordCorrect)
+            {
                 var authenticatedUser = new User
                 {
                     UserId = user.UserId,
@@ -95,8 +97,11 @@ namespace BlogApp.Controllers
                     return RedirectToAction("Index", "Home");
                 } else if (authenticatedUser.Role == UserRole.Admin) {
                     return RedirectToAction("Index", "Admin");
+                } else
+                {
+                    return RedirectToAction("Index", "Admin");
                 }
-                return RedirectToAction("Index", "Admin");
+
             }
             else
             {
@@ -107,9 +112,6 @@ namespace BlogApp.Controllers
 
         public ActionResult Logout()
         {
-            //this.Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
-            //this.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            //this.Response.Cache.SetNoStore();
 
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
             Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
@@ -119,12 +121,6 @@ namespace BlogApp.Controllers
             Session.Clear();
             Session.Abandon();
             Session.RemoveAll();
-
-            //Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            //Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
-            //Response.Cache.SetNoStore();
-
-
 
             // Redirect to the login page
             return RedirectToAction("Login");

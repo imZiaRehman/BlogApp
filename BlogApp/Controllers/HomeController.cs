@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace BlogApp.Controllers
 {
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "User,Moderator")]
     public class HomeController : Controller
     {
         private readonly BlogRepository _blogRepository;

@@ -1,5 +1,19 @@
 ﻿@model BlogApp.ViewModels.PostViewModel
 
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+else if (User.IsInRole("Moderator"))
+{
+    Layout = "~/Views/Shared/_ModeratorLayout.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
 <div class="post-container">
     <h2>@Model.Title</h2>
 
@@ -41,8 +55,18 @@
 
                 @Html.HiddenFor(model => model.PostId)
 
-                <button type="submit" id="ReportPost" class="btn btn-danger">
+                <button type="submit" id="ReportPost" class="btn btn-danger" style="margin: 10px 0px;">
                     Report
+                </button>
+            }
+
+            using (Html.BeginForm("AddSuggestions", "Blog", FormMethod.Get))
+            {
+
+                @Html.HiddenFor(model => model.PostId)
+
+                <button type="submit" id="ReportPost" class="btn btn-success" style="margin: 10px 0px;">
+                    Add Suggestion
                 </button>
             }
 
@@ -50,7 +74,7 @@
 
     </div>
 
-  
+
 
 
     <div class="add-comment-section">
@@ -61,7 +85,7 @@
             {
                 UserId = Model.UserId,
                 PostId = Model.PostId
-                
+
             };
         }
 
@@ -71,22 +95,11 @@
         <!-- Display all comments -->
         <div class="comments">
             @foreach (var comment in Model.Comments)
-            {
-                <div class="comment">
-
-                    <p><strong>@comment.UserName:</strong> @comment.CommentText</p>
-                    <p class="small-font">Date: @comment.CreatedAt</p>
-
-                    <div class="comment-images">
-                        @foreach (var attachment in comment.commentAttachments)
-                        {
-                            <img src="@attachment.FilePath" alt="@attachment.FileName" class="img-thumbnail" style="width: 200px; height: auto;" />
-                        }
-                    </div>
-
-                </div>
-            }
+             {
+                @Html.Partial("CommentView", comment)
+             }
         </div>
+
     </div>
 
 </div>

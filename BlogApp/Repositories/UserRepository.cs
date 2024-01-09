@@ -26,5 +26,29 @@ namespace BlogApp.Repositories
         {
             return _context.Users.FirstOrDefault(u => u.Email == email);
         }
+
+        // Function to get all users
+        public List<User> GetAllUsers()
+        {
+            return _context.Users.ToList();
+        }
+        public void UpdateUserStatus(int userId, CurrentStatus newStatus)
+        {
+            var user = _context.Users.Find(userId);
+            if (user != null)
+            {
+                user.currentStatus = newStatus;
+                _context.SaveChanges();
+            }
+        }
+        public void UpdateUserRole(int userId, UserRole newRole)
+        {
+            var user = _context.Users.Find(userId);
+            if (user != null)
+            {
+                user.Role = newRole;
+                _context.SaveChanges();
+            }
+        }
     }
 }

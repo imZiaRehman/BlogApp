@@ -47,6 +47,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net, Version=0.1.4141.31969, Culture=neutral, PublicKeyToken=f3bc8f8c31beeb49, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net.0.1.0\lib\net35\BCrypt.Net.dll</HintPath>
+    </Reference>
     <Reference Include="CloudinaryDotNet, Version=1.24.0.0, Culture=neutral, PublicKeyToken=c8234dc617ae7841, processorArchitecture=MSIL">
       <HintPath>..\packages\CloudinaryDotNet.1.24.0\lib\net452\CloudinaryDotNet.dll</HintPath>
     </Reference>
@@ -238,13 +241,45 @@
     <Compile Include="Migrations\202401051156355_AddedReportPostTableReason.designer.cs">
       <DependentUpon>202401051156355_AddedReportPostTableReason.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202401061724259_Added CommentLikes.cs" />
+    <Compile Include="Migrations\202401061724259_Added CommentLikes.designer.cs">
+      <DependentUpon>202401061724259_Added CommentLikes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202401080640079_Added CommentLikesTable.cs" />
+    <Compile Include="Migrations\202401080640079_Added CommentLikesTable.designer.cs">
+      <DependentUpon>202401080640079_Added CommentLikesTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202401080725586_Added ReportCommentTable.cs" />
+    <Compile Include="Migrations\202401080725586_Added ReportCommentTable.designer.cs">
+      <DependentUpon>202401080725586_Added ReportCommentTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202401081009218_Added ReplyToComment.cs" />
+    <Compile Include="Migrations\202401081009218_Added ReplyToComment.designer.cs">
+      <DependentUpon>202401081009218_Added ReplyToComment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202401081346060_Added PostSuggestions.cs" />
+    <Compile Include="Migrations\202401081346060_Added PostSuggestions.designer.cs">
+      <DependentUpon>202401081346060_Added PostSuggestions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202401081402020_Added PostSuggestion Replies.cs" />
+    <Compile Include="Migrations\202401081402020_Added PostSuggestion Replies.designer.cs">
+      <DependentUpon>202401081402020_Added PostSuggestion Replies.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202401082228420_Added CurrentStatus.cs" />
+    <Compile Include="Migrations\202401082228420_Added CurrentStatus.designer.cs">
+      <DependentUpon>202401082228420_Added CurrentStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\CommentAttachment.cs" />
+    <Compile Include="Models\CommentLike.cs" />
     <Compile Include="Models\Like.cs" />
     <Compile Include="Models\Post.cs" />
+    <Compile Include="Models\PostSuggestion.cs" />
+    <Compile Include="Models\ReportComment.cs" />
     <Compile Include="Models\ReportPost.cs" />
+    <Compile Include="Models\SuggestionReply.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UsersRoleProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -254,7 +289,9 @@
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\LikeViewModel.cs" />
     <Compile Include="ViewModels\PostViewModel.cs" />
+    <Compile Include="ViewModels\ReportCommentViewModel.cs" />
     <Compile Include="ViewModels\ReportPostViewModel.cs" />
+    <Compile Include="ViewModels\SuggetionPageViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -851,8 +888,20 @@
     <Content Include="Views\Admin\Details.cshtml" />
     <Content Include="Views\Blog\AdminPostDetails.cshtml" />
     <Content Include="Views\Blog\ReportPostPage.cshtml" />
-    <Content Include="Views\Blog\ReportPost.cshtml" />
     <Content Include="Views\Admin\ReportedPost.cshtml" />
+    <Content Include="Views\Shared\_ModeratorLayout.cshtml" />
+    <Content Include="Views\Blog\ReportCommentPage.cshtml" />
+    <Content Include="Views\Blog\CommentView.cshtml" />
+    <Content Include="Views\Blog\AddSuggestions.cshtml" />
+    <Content Include="Views\Blog\UserSuggestionSend.cshtml" />
+    <Content Include="Views\Blog\SuggestionDetails.cshtml" />
+    <Content Include="Views\Blog\UserSuggestionReceived.cshtml" />
+    <Content Include="Views\Blog\SuggestionReceivedDetails.cshtml" />
+    <Content Include="Views\Blog\MyPost.cshtml" />
+    <Content Include="Views\Admin\ReportedComments.cshtml" />
+    <Content Include="Views\Admin\ManageUsers.cshtml" />
+    <Content Include="Views\Blog\EditPost.cshtml" />
+    <Content Include="Views\Blog\EditSuggestionPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -908,6 +957,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202401051156355_AddedReportPostTableReason.resx">
       <DependentUpon>202401051156355_AddedReportPostTableReason.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202401061724259_Added CommentLikes.resx">
+      <DependentUpon>202401061724259_Added CommentLikes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202401080640079_Added CommentLikesTable.resx">
+      <DependentUpon>202401080640079_Added CommentLikesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202401080725586_Added ReportCommentTable.resx">
+      <DependentUpon>202401080725586_Added ReportCommentTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202401081009218_Added ReplyToComment.resx">
+      <DependentUpon>202401081009218_Added ReplyToComment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202401081346060_Added PostSuggestions.resx">
+      <DependentUpon>202401081346060_Added PostSuggestions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202401081402020_Added PostSuggestion Replies.resx">
+      <DependentUpon>202401081402020_Added PostSuggestion Replies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202401082228420_Added CurrentStatus.resx">
+      <DependentUpon>202401082228420_Added CurrentStatus.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

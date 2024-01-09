@@ -1,7 +1,16 @@
 ﻿@{
     ViewBag.Title = "Home Page";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Moderator"))
+    {
+        Layout = "~/Views/Shared/_ModeratorLayout.cshtml";
+    }
 }
+
+
 @model List<BlogApp.ViewModels.PostViewModel>
 
 <h2>All Posts</h2>

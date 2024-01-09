@@ -2,6 +2,18 @@
 
 @{
     ViewBag.Title = "ReportPost";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Moderator"))
+    {
+        Layout = "~/Views/Shared/_ModeratorLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
 }
 
 <h2>Report Post</h2>

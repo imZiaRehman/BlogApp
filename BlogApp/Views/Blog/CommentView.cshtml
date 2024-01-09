@@ -1,0 +1,42 @@
+﻿@model BlogApp.ViewModels.CommentViewModel
+
+<div class="comment card mb-3">
+    <div class="card-body">
+        <p class="card-text"><strong>@Model.UserName:</strong> @Model.CommentText</p>
+        <p class="card-text small-font">Date: @Model.CreatedAt</p>
+        <p class="card-text small-font">Likes: @Model.Likes.Count</p>
+        <div class="comment-images">
+            @foreach (var attachment in Model.commentAttachments)
+             {
+                <img src="@attachment.FilePath" alt="@attachment.FileName" class="img-thumbnail mb-2" style="max-width: 200px; height: auto;" />
+             }
+        </div>
+
+        <div class="comment-buttons">
+            @{
+                var actionLinkText = Model.UserHasLiked ? "Unlike" : "Like";
+            }
+
+            @Html.ActionLink(actionLinkText, "LikeToComment", "Blog", new { commentId = Model.CommentId, postId = Model.PostId }, new { @class = "btn btn-outline-primary btn-sm" })
+            @Html.ActionLink("Report", "ReportCommentPage", "Blog", new { commentId = Model.CommentId }, new { @class = "btn btn-outline-danger btn-sm" })
+
+            @{
+                var commentViewModelForReply = new BlogApp.ViewModels.CommentViewModel
+                {
+                    UserId = Model.UserId,
+                    PostId = Model.PostId,
+                    ParentCommentId = Model.CommentId,
+                };
+            }
+
+            @Html.Partial("AddComment", commentViewModelForReply)
+
+            <div class="replies">
+                @foreach (var reply in Model.ChildComments)
+                {
+                    @Html.Partial("CommentView", reply)
+                }
+            </div>
+        </div>
+    </div>
+</div>

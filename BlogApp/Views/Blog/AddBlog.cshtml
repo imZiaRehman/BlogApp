@@ -1,5 +1,19 @@
 ﻿@model BlogApp.ViewModels.PostViewModel
 
+@{ 
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Moderator"))
+    {
+        Layout = "~/Views/Shared/_ModeratorLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}
 <head>
 
     <link rel="stylesheet" href="~/Scripts/ckeditor/contents.css" />
@@ -36,7 +50,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <textarea id="Content" name="Content" class="form-control" rows="10"></textarea>
+            <textarea id="Content" name="Content" class="form-control" rows="20"></textarea>
             @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -60,14 +74,6 @@
         var editor = CKEDITOR.replace('Content');
         CKFinder.setupCKEditor(editor);
     </script>
-
-
-    @*<script src="https://cdn.ckeditor.com/4.16.2/full/ckeditor.js"></script>
-        <script>
-            $(document).ready(function () {
-                CKEDITOR.replace('Content');
-            });
-        </script>*@
 
 
     @Scripts.Render("~/bundles/jqueryval")

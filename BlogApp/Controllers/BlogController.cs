@@ -23,6 +23,7 @@ namespace BlogApp.Controllers
         {
             _blogRepository = new BlogRepository(new Data.BlogDbContext());
         }
+
         public ActionResult AddBlog()
         {
             return View();
@@ -60,8 +61,7 @@ namespace BlogApp.Controllers
             return View(post);
         }
 
-        [Authorize(Roles = "Admin")]
-
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult AdminPostDetails(int id)
         {
             var post = _blogRepository.GetPostById(id);
@@ -114,12 +114,12 @@ namespace BlogApp.Controllers
                     string attachmentUrl = uploadResult.Url.ToString();
 
                     // Pass the attachment URL to your repository method
-                    _blogRepository.AddCommentWithAttachment(currentUser.UserId, commentViewModel.PostId, commentViewModel.CommentText, attachmentUrl, attachment.FileName);
+                    _blogRepository.AddCommentWithAttachment(currentUser.UserId, commentViewModel.PostId, commentViewModel.CommentText, attachmentUrl, attachment.FileName, commentViewModel.ParentCommentId);
                 }
                 else
                 {
                     // No attachment provided, pass null or handle accordingly
-                    _blogRepository.AddComment(currentUser.UserId, commentViewModel.PostId, commentViewModel.CommentText);
+                    _blogRepository.AddComment(currentUser.UserId, commentViewModel.PostId, commentViewModel.CommentText, commentViewModel.ParentCommentId);
                 }
 
                 // Redirect or return a response as needed
@@ -131,7 +131,7 @@ namespace BlogApp.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Moderator")]
 
         public ActionResult ApprovePost(int postId)
         {
@@ -140,7 +140,7 @@ namespace BlogApp.Controllers
             return RedirectToAction("Index", "Admin");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Moderator")]
 
         public ActionResult RejectPost(int postId)
         {
@@ -182,37 +182,345 @@ namespace BlogApp.Controllers
                     reportPostViewModel.UserId,
                     reportPostViewModel.Reason
                 );
+                var authenticatedUser = (User)Session["AuthenticatedUser"];
 
-                return RedirectToAction("Index", "Home");
+                if (authenticatedUser.Role == UserRole.User)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else if (authenticatedUser.Role == UserRole.Admin)
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
             }
 
             reportPostViewModel.Post = _blogRepository.GetPostById(reportPostViewModel.PostId);
-            // If the model state is not valid, return to the report view with the model
+
             return View(reportPostViewModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        public ActionResult AddSuggestions(int postId)
+        {
+            var postViewModel = _blogRepository.GetPostById(postId);
 
+            if (postViewModel == null)
+            {
+                return HttpNotFound("Post not found");
+            }
+            var user = (User)Session["AuthenticatedUser"];
+            var suggestionPostViewModel = new SuggetionPageViewModel
+            {
+                Post = postViewModel,
+                UserId = user.UserId,
+                PostId = postId
+            };
+
+            return View(suggestionPostViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddSuggestions(SuggetionPageViewModel suggetionPostViewModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _blogRepository.AddSuggestion(
+                    suggetionPostViewModel.PostId,
+                    suggetionPostViewModel.UserId,
+                    suggetionPostViewModel.SuggestionText
+                );
+
+                var authenticatedUser = (User)Session["AuthenticatedUser"];
+
+                if (authenticatedUser.Role == UserRole.User)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else if (authenticatedUser.Role == UserRole.Admin)
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+
+            suggetionPostViewModel.Post = _blogRepository.GetPostById(suggetionPostViewModel.PostId);
+            // If the model state is not valid, return to the report view with the model
+            return View(suggetionPostViewModel);
+        }
+
+
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult AcceptReportToPost(int postId)
         {
             // Implement logic to accept the report and take necessary actions
             _blogRepository.AcceptReportToPost(postId);
 
-            TempData["SuccessMessage"] = "Report accepted successfully.";
-
             return RedirectToAction("ReportedPost", "Admin");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Moderator")]
 
         public ActionResult RejectReportToPost(int postId)
         {
             // Implement logic to accept the report and take necessary actions
             _blogRepository.ApprovePost(postId);
 
-            TempData["SuccessMessage"] = "Report accepted successfully.";
+            return RedirectToAction("ReportedPost", "Admin");
+        
+        }
+
+        //TODO: To be implemented.
+        [Authorize(Roles = "Admin,Moderator")]
+        public ActionResult AcceptReportedComment(int commentId)
+        {
+            _blogRepository.AcceptReportedComment(commentId);
+            return RedirectToAction("ReportedPost", "Admin");
+        }
+
+        [Authorize(Roles = "Admin,Moderator")]
+        public ActionResult RejectReportedComment(int commentId)
+        {
+            _blogRepository.RejectReportedComment(commentId);
 
             return RedirectToAction("ReportedPost", "Admin");
+        }
+
+        public ActionResult LikeToComment(int commentId, int postId)
+        {
+            var currentUser = (User)Session["AuthenticatedUser"];
+            var alreadyLiked = _blogRepository.HasUserLikedComment(currentUser.UserId, commentId);
+
+            if (!alreadyLiked)
+            {
+                _blogRepository.AddLikeToComment(commentId, currentUser.UserId);
+            } else
+            {
+                _blogRepository.RemoveLikeToComment(commentId, currentUser.UserId);
+            }
+
+            return RedirectToAction("Details", new { id = postId });
+        }        
+
+        public ActionResult ReportCommentPage(int commentId)
+        {
+            var commentViewModel = _blogRepository.GetCommentById(commentId);
+
+            if (commentViewModel == null)
+            {
+                return HttpNotFound("Post not found");
+            }
+            var user = (User)Session["AuthenticatedUser"];
+            var reportCommentViewModel = new ReportCommentViewModel
+            {
+                Comment = commentViewModel,
+                UserId = user.UserId,
+                CommentId = commentId
+            };
+
+            return View(reportCommentViewModel);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReportCommentPage(ReportCommentViewModel reportCommentViewModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _blogRepository.ReportComment(
+                    reportCommentViewModel.CommentId,
+                    reportCommentViewModel.UserId,
+                    reportCommentViewModel.Reason
+                );
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            reportCommentViewModel.Comment = _blogRepository.GetCommentById(reportCommentViewModel.CommentId);
+            // If the model state is not valid, return to the report view with the model
+            return View(reportCommentViewModel);
+        }
+
+        public ActionResult UserSuggestionSend()
+        {
+            var currentUser = (User)Session["AuthenticatedUser"];
+
+            var suggestions = _blogRepository.GetSuggestionsGivenByUser(currentUser.UserId);
+
+            return View(suggestions);
+
+        }
+
+        public ActionResult UserSuggestionReceived()
+        {
+            var currentUser = (User)Session["AuthenticatedUser"];
+
+            var suggestions = _blogRepository.GetSuggestionsReceivedByUser(currentUser.UserId);
+
+            return View(suggestions);
+        }
+
+        public ActionResult SuggestionDetails(int id)
+        {
+            
+            SuggetionPageViewModel suggestion = _blogRepository.GetSuggestionById(id);
+
+            if (suggestion == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(suggestion);            
+        }
+
+        public ActionResult SuggestionReceivedDetails(int id)
+        { 
+            SuggetionPageViewModel suggestion = _blogRepository.GetSuggestionById(id);
+
+            if (suggestion == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(suggestion);
+        }
+
+        public ActionResult RejectSuggestion(int suggetionId)
+        {
+            _blogRepository.RejectSuggestion(suggetionId);
+
+            var currentUser = (User)Session["AuthenticatedUser"];
+            if (currentUser.Role == UserRole.User)
+            {
+                return RedirectToAction("Index", "Home");
+            } else
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+        }
+
+        public ActionResult MyPost()
+        {
+            var currentUser = (User)Session["AuthenticatedUser"];
+
+            var posts = _blogRepository.GetPostsByUserId(currentUser.UserId);
+            return View(posts);
+        }
+
+        [Authorize(Roles = "Admin,Moderator")]
+        public ActionResult DeletePost(PostViewModel postViewModel)
+        {
+
+            var currentUser = (User)Session["AuthenticatedUser"];
+
+            _blogRepository.DeactivatePost(postViewModel.PostId);
+
+            if (currentUser.Role == UserRole.User)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+        }
+
+        public ActionResult EditPost(int PostId)
+        {
+            var currentUser = (User)Session["AuthenticatedUser"];
+
+            var post = _blogRepository.GetPostById(PostId);
+            
+            if(currentUser.UserId == post.UserId)
+            {
+                return View(post);
+            }
+
+            if (currentUser.Role == UserRole.User)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditPost( PostViewModel editedPost)
+        {
+            var currentUser = (User)Session["AuthenticatedUser"];
+
+            // Check if the model is valid
+            if (ModelState.IsValid)
+            {
+                _blogRepository.UpdatePost(editedPost);
+
+                if (currentUser.Role == UserRole.User)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+
+            return View(editedPost);
+        }
+
+        public ActionResult EditSuggestionPost(int PostId, int suggestionId)
+        {
+            var currentUser = (User)Session["AuthenticatedUser"];
+
+            var post = _blogRepository.GetPostById(PostId);
+            _blogRepository.UpdateSuggestionStatus(suggestionId);
+
+            if (currentUser.UserId == post.UserId)
+            {
+                return View(post);
+            }
+
+            if (currentUser.Role == UserRole.User)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditSuggestionPost(PostViewModel editedPost)
+        {
+            var currentUser = (User)Session["AuthenticatedUser"];
+
+            // Check if the model is valid
+            if (ModelState.IsValid)
+            {
+                _blogRepository.UpdatePost(editedPost);
+
+                if (currentUser.Role == UserRole.User)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+
+            return View(editedPost);
         }
 
     }

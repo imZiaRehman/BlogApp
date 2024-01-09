@@ -21,6 +21,13 @@ namespace BlogApp.Data
 
         public DbSet<ReportPost> ReportPosts { get; set; }
 
+        public DbSet<CommentLike> CommentLikes { get; set; }
+
+        public DbSet<ReportComment> ReportComments { get; set; }
+
+        public DbSet<PostSuggestion> PostSuggestions { get; set; }
+
+        public DbSet<SuggestionReply> SuggestionReplies { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             // Configure the model, e.g., set the primary key, unique constraints, etc.

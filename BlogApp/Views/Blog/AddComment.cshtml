@@ -1,17 +1,32 @@
 ﻿@model BlogApp.ViewModels.CommentViewModel
 
 
+
 @using (Html.BeginForm("AddCommentToPost", "Blog", FormMethod.Post, new { id = "commentForm", enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(model => model.UserId)
     @Html.HiddenFor(model => model.PostId)
+    @Html.HiddenFor(model => model.ParentCommentId)
     <!-- Input for adding a new comment -->
-    @Html.TextAreaFor(model => model.CommentText, new { @class = "form-control", rows = "3", placeholder = "Add a comment" })
+    <div class="row">
+        <div class="col-12">
+
+            @Html.TextAreaFor(model => model.CommentText, new { @class = "form-control", rows = "1", placeholder = "Add a comment" })
+        </div>
+    </div>
     @Html.ValidationMessageFor(model => model.CommentText, "", new { @class = "text-danger" })
 
     <input type="file" name="attachment" id="attachment" accept="image/*">
     <!-- Button to submit the comment -->
-    <button type="submit" class="btn btn-primary">Add Comment</button>
+    if (Model.ParentCommentId == null)
+    {
+        <button type="submit" class="btn btn-primary">Add Comment</button>
+
+    }
+    else
+    {
+        <button type="submit" class="btn btn-primary">Add Reply</button>
+    }
 }
 
 

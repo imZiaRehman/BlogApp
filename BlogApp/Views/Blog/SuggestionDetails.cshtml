@@ -1,0 +1,50 @@
+﻿@model BlogApp.ViewModels.SuggetionPageViewModel
+
+@{
+    ViewBag.Title = "SuggestionDetails";
+}
+
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+else if (User.IsInRole("Moderator"))
+{
+    Layout = "~/Views/Shared/_ModeratorLayout.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>SuggestionDetails</h2>
+
+
+<div class="post-container">
+    <h2>@Model.Post.Title</h2>
+
+    <div class="post-header">
+        <p class="small-font">Created by: @Model.Post.UserName | Date: @Model.Post.CreatedAt</p>
+    </div>
+
+    <div class="post-content">
+        @Html.Raw(Model.Post.Content)
+    </div>
+</div>
+
+    <div>
+        <h4>Suggetion</h4>
+        <hr />
+        <dl class="dl-horizontal">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SuggestionText)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SuggestionText)
+            </dd>
+
+        </dl>
+    </div>

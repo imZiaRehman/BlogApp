@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "SuggestionReceivedDetails";
+
+}
+
+@model BlogApp.ViewModels.SuggetionPageViewModel
+
+
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+else if (User.IsInRole("Moderator"))
+{
+    Layout = "~/Views/Shared/_ModeratorLayout.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>SuggestionDetails</h2>
+
+
+<div class="post-container">
+    <h2>@Model.Post.Title</h2>
+
+    <div class="post-header">
+        <p class="small-font">Created by: @Model.Post.UserName | Date: @Model.Post.CreatedAt</p>
+    </div>
+
+    <div class="post-content">
+        @Html.Raw(Model.Post.Content)
+    </div>
+</div>
+
+<div>
+    <h4>Suggetion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            Suggested By:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SuggestionText)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SuggestionText)
+        </dd>
+
+    </dl>
+    <hr />
+
+    @if (Model.suggestionStatus == BlogApp.Models.SuggestionStatus.Live)
+     {
+        <div class="btn-group">
+            <a href="@Url.Action("EditSuggestionPost", "Blog", new { postId = Model.PostId , suggestionId = Model.Id})" class="btn btn-success">Accept</a>
+
+
+            @using (Html.BeginForm("RejectSuggestion", "Blog", new { suggetionId = Model.Id }, FormMethod.Post))
+            {
+                <button type="submit" class="btn btn-danger">Reject</button>
+            }
+        </div>
+     }
+
+
+</div>

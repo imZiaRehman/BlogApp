@@ -1,0 +1,55 @@
+﻿@model List<BlogApp.ViewModels.SuggetionPageViewModel>
+
+@{
+    ViewBag.Title = "User Suggestions";
+}
+
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+else if (User.IsInRole("Moderator"))
+{
+    Layout = "~/Views/Shared/_ModeratorLayout.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>User Suggestions</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Post</th>
+            <th>Suggeston Text</th>
+            <th>Suggestion Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var suggestion in Model)
+        {
+            <tr>
+                <td>@suggestion.Post.Title</td>
+                <td>@suggestion.SuggestionText</td>
+                <td>
+                    @if (suggestion.suggestionStatus == BlogApp.Models.SuggestionStatus.Live)
+                    {
+                        <text>Not Yet Responding</text>
+                    }
+                    else
+                    {
+                        @suggestion.suggestionStatus
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("View Post", "SuggestionDetails", "Blog", new { id = suggestion.Id }, new { @class = "btn btn-primary" })
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
