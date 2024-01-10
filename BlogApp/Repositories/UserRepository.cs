@@ -27,6 +27,17 @@ namespace BlogApp.Repositories
             return _context.Users.FirstOrDefault(u => u.Email == email);
         }
 
+        public User GetUserByToken(string token)
+        {
+            return _context.Users.FirstOrDefault(u => u.EmailConfirmationToken == token);
+        }
+
+        public void ConfirmUserToken(string token)
+        {
+            var User = _context.Users.FirstOrDefault(u => u.EmailConfirmationToken == token);
+            User.IsEmailConfirmed = true;
+            _context.SaveChanges();
+        }
         // Function to get all users
         public List<User> GetAllUsers()
         {

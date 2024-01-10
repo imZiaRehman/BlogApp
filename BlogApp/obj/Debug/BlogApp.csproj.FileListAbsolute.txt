@@ -112,3 +112,4 @@ C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedPost
 C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedCurrentStatus.resources
 C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\BCrypt.Net.dll
 C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\BCrypt.Net.xml
+C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedEmailConfirmOptioninUserTable.resources

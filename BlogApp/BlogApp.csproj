@@ -206,6 +206,7 @@
     <Compile Include="Controllers\EditorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Data\BlogDbContext.cs" />
+    <Compile Include="Email\EmailService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -268,6 +269,10 @@
     <Compile Include="Migrations\202401082228420_Added CurrentStatus.cs" />
     <Compile Include="Migrations\202401082228420_Added CurrentStatus.designer.cs">
       <DependentUpon>202401082228420_Added CurrentStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202401092016201_Added EmailConfirmOptioninUserTable.cs" />
+    <Compile Include="Migrations\202401092016201_Added EmailConfirmOptioninUserTable.designer.cs">
+      <DependentUpon>202401092016201_Added EmailConfirmOptioninUserTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attachment.cs" />
@@ -902,6 +907,8 @@
     <Content Include="Views\Admin\ManageUsers.cshtml" />
     <Content Include="Views\Blog\EditPost.cshtml" />
     <Content Include="Views\Blog\EditSuggestionPost.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Account\ConfirmEmailSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -978,6 +985,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202401082228420_Added CurrentStatus.resx">
       <DependentUpon>202401082228420_Added CurrentStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202401092016201_Added EmailConfirmOptioninUserTable.resx">
+      <DependentUpon>202401092016201_Added EmailConfirmOptioninUserTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

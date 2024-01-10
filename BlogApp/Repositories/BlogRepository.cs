@@ -332,6 +332,7 @@ namespace BlogApp.Repositories
         public List<CommentViewModel> GetMostRecentComments(int count)
         {
             var comments = _context.Comments
+            .Where(l=> (l._CommentStatus == CommentStatus.Live) || (l._CommentStatus == CommentStatus.Reported))
             .OrderByDescending(c => c.CreatedAt)
             .Take(count)
             //.Include(c => c.PostId)
@@ -742,7 +743,7 @@ namespace BlogApp.Repositories
         public List<PostViewModel> GetPostsByUserId(int userId)
         {
             var posts = _context.Posts
-                .Where(p => p.UserId == userId)
+                .Where(p => p.UserId == userId && (p.PostStatus == Status.Live || p.PostStatus == Status.Reported))
                 .Select(p => new PostViewModel
                 {
                     PostId = p.PostId,

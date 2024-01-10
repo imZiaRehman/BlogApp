@@ -15,6 +15,9 @@ namespace BlogApp.Models
         public UserRole Role { get; set; }
 
         public CurrentStatus currentStatus { get; set; }
+        public bool IsEmailConfirmed { get; set; }
+        public string EmailConfirmationToken { get; set; }
+
 
     }
     public enum UserRole
