@@ -10,7 +10,7 @@ namespace BlogApp.ViewModels
     {
         public int CommentId { get; set; }
 
-        [Required (ErrorMessage ="Comment Content is required.")]
+        [Required(ErrorMessage = "Comment Content is required.")]
         public string CommentText { get; set; }
 
         public int UserId { get; set; }
@@ -18,10 +18,11 @@ namespace BlogApp.ViewModels
         public DateTime CreatedAt { get; set; }
         public string UserName { get; set; }
 
-        public string PostTitle {  get; set; }
+        public string PostTitle { get; set; }
 
         public bool UserHasLiked { get; set; }
 
+        public int UserIdOfUserAccessing {get; set;}
         public int? ParentCommentId { get; set; }
 
         public virtual Comment ParentComment { get; set; }

@@ -30,7 +30,7 @@ namespace BlogApp
                 "4wZiP7kyWnoFWRZv9dExa4sAC1M"
             );
 
-            Cloudinary cloudinary = new Cloudinary(account);
+            var cloudinary = new Cloudinary(account);
 
             CloudinaryConfig.CloudinaryInstance = cloudinary;
 

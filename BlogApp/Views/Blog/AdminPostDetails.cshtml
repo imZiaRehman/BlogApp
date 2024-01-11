@@ -58,7 +58,7 @@
 
 
         @if (Model.UserIdOfUserAccessingPost != Model.UserId)
-        {
+         {
 
             using (Html.BeginForm("AddSuggestions", "Blog", FormMethod.Get))
             {
@@ -70,12 +70,9 @@
                 </button>
             }
 
-        }
+         }
 
     </div>
-
-
-
 
     <div class="add-comment-section">
         <!-- Add Comment Form -->

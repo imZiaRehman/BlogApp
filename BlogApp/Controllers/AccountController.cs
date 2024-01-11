@@ -48,6 +48,7 @@ namespace BlogApp.Controllers
                 if (_userRepository.GetUserByEmail(newUser.Email) == null)
                 {
                     string token = GenerateToken();
+
                     //Create user object and save it in database.
                     string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
                     var user = new User
@@ -193,14 +194,7 @@ namespace BlogApp.Controllers
                 DateTime timestamp = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
                 Guid key = new Guid(data.Skip(sizeof(long)).ToArray());
 
-                // Check if the token has expired (adjust the expiration time as needed)
-                //if (DateTime.UtcNow.Subtract(timestamp).TotalHours > 24)
-                //{
-                // Token has expired
-                //  return View("TokenExpired"); // You can create a TokenExpired view
-                //}
-
-                // Find the user associated with the key
+          
                 var user = _userRepository.GetUserByToken(token);
                 if (user == null)
                 {

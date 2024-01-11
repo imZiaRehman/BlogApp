@@ -118,7 +118,9 @@ namespace BlogApp.Repositories
             {
                 CommentId = c.CommentId,
                 CommentText = c.Content,
+                PostId = c.PostId,
                 CreatedAt = c.CreatedAt,
+                UserId = c.UserId,
                 UserName = _context.Users
                     .Where(u => u.UserId == c.UserId)
                     .Select(u => u.FirstName + " " + u.LastName)
@@ -127,7 +129,7 @@ namespace BlogApp.Repositories
                 Likes = c.Likes,
                 commentAttachments = MapCommentAttachments(c.commentAttachments),
                 ChildComments = MapChildComments(comments, user, c.CommentId),
-
+                UserIdOfUserAccessing = user.UserId
             }).ToList();
         }
 
@@ -141,6 +143,7 @@ namespace BlogApp.Repositories
                     CommentText = c.Content,
                     CreatedAt = c.CreatedAt,
                     PostId = c.PostId,
+                    UserId = c.UserId,
                     UserName = _context.Users
                         .Where(u => u.UserId == c.UserId)
                         .Select(u => u.FirstName + " " + u.LastName)
@@ -148,6 +151,7 @@ namespace BlogApp.Repositories
                     UserHasLiked = c.Likes.Any(l => l.UserId == user.UserId && l.commentId == c.CommentId),
                     Likes = c.Likes,
                     commentAttachments = MapCommentAttachments(c.commentAttachments),
+                    UserIdOfUserAccessing = user.UserId,
                     // Recursively fetch and map child comments
                     ChildComments = MapChildComments(comments, user, c.CommentId)
                 }).ToList();

@@ -18,7 +18,21 @@
             }
 
             @Html.ActionLink(actionLinkText, "LikeToComment", "Blog", new { commentId = Model.CommentId, postId = Model.PostId }, new { @class = "btn btn-outline-primary btn-sm" })
-            @Html.ActionLink("Report", "ReportCommentPage", "Blog", new { commentId = Model.CommentId }, new { @class = "btn btn-outline-danger btn-sm" })
+
+            @{
+                if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                {
+                    @Html.ActionLink("Delete", "DeleteCommnet", "Blog", new { commentId = Model.CommentId, postId = Model.PostId }, new { @class = "btn btn-outline-danger btn-sm" })
+                }
+                else if (Model.UserId != Model.UserIdOfUserAccessing)
+                {
+                    @Html.ActionLink("Report", "ReportCommentPage", "Blog", new { commentId = Model.CommentId }, new { @class = "btn btn-outline-danger btn-sm" })
+                }
+                else
+                {
+                    @Html.ActionLink("Delete", "DeleteCommnet", "Blog", new { commentId = Model.CommentId, postId = Model.PostId }, new { @class = "btn btn-outline-danger btn-sm" })
+                }
+            }
 
             @{
                 var commentViewModelForReply = new BlogApp.ViewModels.CommentViewModel
@@ -33,9 +47,9 @@
 
             <div class="replies">
                 @foreach (var reply in Model.ChildComments)
-                 {
+                {
                     @Html.Partial("CommentView", reply)
-                 }
+                }
             </div>
         </div>
     </div>

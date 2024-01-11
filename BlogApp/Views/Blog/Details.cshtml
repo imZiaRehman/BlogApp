@@ -37,15 +37,15 @@ else
 
             <button type="submit" id="likeButton" class="btn btn-primary LikePost">
                 @if (Model.UserHasLiked)
-                 {
+                {
                     <text>Unlike</text>
-                 }
+                }
                 else
                 {
                     <text>Like</text>
                 }
             </button>
-         }
+        }
 
         @if (Model.UserIdOfUserAccessingPost != Model.UserId)
         {
@@ -60,6 +60,9 @@ else
                 </button>
             }
 
+
+
+            /*
             using (Html.BeginForm("AddSuggestions", "Blog", FormMethod.Get))
             {
 
@@ -69,7 +72,16 @@ else
                     Add Suggestion
                 </button>
             }
+            */
 
+            
+            var suggestionPostViewModel = new BlogApp.ViewModels.SuggetionPageViewModel
+            {
+                UserId = Model.UserId,
+                PostId = Model.PostId
+            };
+
+            @Html.Partial("AddSuggestionView", suggestionPostViewModel)
         }
         else
         {
@@ -93,10 +105,10 @@ else
         <!-- Display all comments -->
         <div class="comments">
             @foreach (var comment in Model.Comments)
-             {
+            {
                 comment.PostId = Model.PostId;
                 @Html.Partial("CommentView", comment)
-             }
+            }
         </div>
 
     </div>

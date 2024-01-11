@@ -113,3 +113,6 @@ C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedCurr
 C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\BCrypt.Net.dll
 C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\BCrypt.Net.xml
 C:\Users\Dev\source\repos\BlogApp\BlogApp\obj\Debug\BlogApp.Migrations.AddedEmailConfirmOptioninUserTable.resources
+C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\HtmlAgilityPack.dll
+C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\HtmlAgilityPack.pdb
+C:\Users\Dev\source\repos\BlogApp\BlogApp\bin\HtmlAgilityPack.xml

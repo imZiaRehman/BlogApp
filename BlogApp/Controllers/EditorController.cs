@@ -9,11 +9,15 @@ namespace CkEditor.Controllers
 {
     public class EditorController : Controller
     {
-        // GET: Editor
+        #region GET
         public ActionResult Index()
         {
             return View();
         }
+
+        #endregion
+
+        #region POST
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult UploadImage(HttpPostedFileBase upload, string CKEditorFuncNum, string CKEditor, string langCode)
@@ -45,5 +49,6 @@ namespace CkEditor.Controllers
             return Content(output);
         }
 
+        #endregion
     }
 }

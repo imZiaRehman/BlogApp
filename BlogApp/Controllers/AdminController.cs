@@ -13,7 +13,6 @@ namespace BlogApp.Controllers
     
     public class AdminController : Controller
     {
-
         private readonly BlogRepository _blogRepository;
         private readonly UserRepository _userRepository;
 
@@ -35,7 +34,7 @@ namespace BlogApp.Controllers
             //If User is not authenticated redirect to login page.
             return RedirectToAction("Login", "Account");
         }
-
+       
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult ManagePost()
         {

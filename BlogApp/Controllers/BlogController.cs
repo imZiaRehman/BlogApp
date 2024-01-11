@@ -11,6 +11,11 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net.Mail;
 using System.Xml;
+using HtmlAgilityPack;
+using System.Diagnostics;
+using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
+
 
 namespace BlogApp.Controllers
 {
@@ -28,6 +33,33 @@ namespace BlogApp.Controllers
         {
             return View();
         }
+        static bool IsDataUrl(string url)
+        {
+            return url.StartsWith("data:");
+        }
+
+        static List<string> ExtractSrcAttributes(string htmlString)
+        {
+            List<string> srcAttributes = new List<string>();
+
+            // Load HTML document using HtmlAgilityPack
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(htmlString);
+
+            // Select all img tags and extract src attribute values
+            var imgTags = doc.DocumentNode.SelectNodes("//img[@src]");
+            if (imgTags != null)
+            {
+                foreach (var imgTag in imgTags)
+                {
+                    string srcValue = imgTag.GetAttributeValue("src", "");
+                    srcAttributes.Add(srcValue);
+                }
+            }
+
+            return srcAttributes;
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -37,6 +69,24 @@ namespace BlogApp.Controllers
             {
                 var authenticatedUser = (User)Session["AuthenticatedUser"];
 
+                List<string> srcAttributes = ExtractSrcAttributes(postViewModel.Content);
+                foreach(var link in srcAttributes)
+                {
+                    if (IsDataUrl(link))
+                    {
+                        byte[] imageData = Convert.FromBase64String(link.Split(',')[1]);
+
+                        var uploadParams = new ImageUploadParams
+                        {
+                            File = new CloudinaryDotNet.Actions.FileDescription("image", new System.IO.MemoryStream(imageData)),
+                            PublicId = Guid.NewGuid().ToString(), // Unique identifier for the image
+                        };
+
+                        // Upload image to Cloudinary
+                        var uploadResult = CloudinaryConfig.CloudinaryInstance.Upload(uploadParams);
+
+                    }
+                }
                 // Map the PostViewModel to a Post entity and add it to the repository
                 var post = new Post
                 {
@@ -60,6 +110,7 @@ namespace BlogApp.Controllers
             var post = _blogRepository.GetPostById(id);
             return View(post);
         }
+
 
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult AdminPostDetails(int id)
@@ -237,18 +288,7 @@ namespace BlogApp.Controllers
 
                 var authenticatedUser = (User)Session["AuthenticatedUser"];
 
-                if (authenticatedUser.Role == UserRole.User)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                else if (authenticatedUser.Role == UserRole.Admin)
-                {
-                    return RedirectToAction("Index", "Admin");
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Admin");
-                }
+                return RedirectToAction("UserSuggestionSend");
             }
 
             suggetionPostViewModel.Post = _blogRepository.GetPostById(suggetionPostViewModel.PostId);
@@ -260,9 +300,7 @@ namespace BlogApp.Controllers
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult AcceptReportToPost(int postId)
         {
-            // Implement logic to accept the report and take necessary actions
             _blogRepository.AcceptReportToPost(postId);
-
             return RedirectToAction("ReportedPost", "Admin");
         }
 
@@ -270,9 +308,7 @@ namespace BlogApp.Controllers
 
         public ActionResult RejectReportToPost(int postId)
         {
-            // Implement logic to accept the report and take necessary actions
             _blogRepository.ApprovePost(postId);
-
             return RedirectToAction("ReportedPost", "Admin");
         
         }
@@ -305,9 +341,40 @@ namespace BlogApp.Controllers
             {
                 _blogRepository.RemoveLikeToComment(commentId, currentUser.UserId);
             }
+            if (currentUser.Role == UserRole.User)
+            {
+                return RedirectToAction("Details", new { id = postId });
+            }
+            else if (currentUser.Role == UserRole.Admin)
+            {
+                return RedirectToAction("AdminPostDetails", new { id = postId });
+            }
+            else
+            {
+                return RedirectToAction("AdminPostDetails", new { id = postId });
+            }
+            
+        }
 
-            return RedirectToAction("Details", new { id = postId });
-        }        
+        public ActionResult DeleteCommnet(int commentId, int postId)
+        {
+            var currentUser = (User)Session["AuthenticatedUser"];
+            _blogRepository.AcceptReportedComment(commentId);
+
+            if (currentUser.Role == UserRole.User)
+            {
+                return RedirectToAction("Details", new { id = postId });
+            }
+            else if (currentUser.Role == UserRole.Admin)
+            {
+                return RedirectToAction("AdminPostDetails", new { id = postId });
+            }
+            else
+            {
+                return RedirectToAction("AdminPostDetails", new { id = postId });
+            }
+
+        }
 
         public ActionResult ReportCommentPage(int commentId)
         {
