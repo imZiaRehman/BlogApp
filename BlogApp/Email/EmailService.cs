@@ -12,8 +12,8 @@ namespace BlogApp.Email
     {
         private readonly string smtpServer = "smtp.gmail.com";
         private readonly int smtpPort = 587; 
-        private readonly string smtpUsername = "mziarehman98@gmail.com";
-        private readonly string smtpAppPassword = "yeqtkgyyjxutolno";
+        private readonly string smtpUsername = "";
+        private readonly string smtpAppPassword = "";
 
         public void SendConfirmationEmail(string toEmail, string confirmationLink)
         {

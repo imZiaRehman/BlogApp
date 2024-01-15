@@ -25,9 +25,9 @@ namespace BlogApp
 
             // Configure Cloudinary
             Account account = new Account(
-                "dhjmzgxek",
-                "264693227921537",
-                "4wZiP7kyWnoFWRZv9dExa4sAC1M"
+                "",
+                "",
+                ""
             );
 
             var cloudinary = new Cloudinary(account);
